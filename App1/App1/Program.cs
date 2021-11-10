@@ -16,8 +16,6 @@ namespace App1
 
             // open chrome browser
             IWebDriver driver = new ChromeDriver();
-            
-            
 
             driver.Manage().Window.Maximize();
 
@@ -65,17 +63,17 @@ namespace App1
             timeOption.Click();
             //Identify Code textbox  and enter Code
             IWebElement codeTextBox = driver.FindElement(By.Id("Code"));
-            codeTextBox.SendKeys("October2021");
+            codeTextBox.SendKeys("ZTime2021");
 
             //Identify Description textbox and enter Description
             IWebElement descriptionTextBox = driver.FindElement(By.Id("Description"));
-            descriptionTextBox.SendKeys("October2021");
+            descriptionTextBox.SendKeys("Prai2021");
 
             //Identify Price textbox and enter Price
             IWebElement priceTag = driver.FindElement(By.XPath("//*[@id='TimeMaterialEditForm']/div/div[4]/div/span[1]/span"));
             priceTag.Click();
             IWebElement priceTextBox = driver.FindElement(By.Id("Price"));
-            priceTextBox.SendKeys("14");
+            priceTextBox.SendKeys("25");
 
             // Enter Save button
             IWebElement saveButton = driver.FindElement(By.Id("SaveButton"));
@@ -89,8 +87,8 @@ namespace App1
 
             //check the time record is present in the table as expected
             IWebElement actualcode = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]"));
-
-            if (actualcode.Text == "October2021")
+            
+            if (actualcode.Text == "ZTime2021")
             {
                 Console.WriteLine("Time recored has been created successfully");
             }
@@ -98,9 +96,75 @@ namespace App1
             {
                 Console.WriteLine("Testfailed");
             }
+
+            //--------------------Edit Data----------------------------
+
+            // check last page 
+
+            gotolastPageButton.Click();
+
+            //Edit the Record
+
+            IWebElement editButton = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+            editButton.Click();
             
+            //Thread.Sleep(2000);
+
+            // Edit the Text box
+            IWebElement codeTextBox1 = driver.FindElement(By.Id("Code"));
+            codeTextBox1.Clear();
+
+            // input different Code 
+            codeTextBox1.SendKeys("Zoom2021");
+
+            // Enter Save button
+            IWebElement saveButton1 = driver.FindElement(By.Id("SaveButton"));
+            saveButton1.Click();
+            Thread.Sleep(2000);
+
+            // check last page 
+            IWebElement lastPageButton = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[4]/a[4]/span"));
+            lastPageButton.Click();
+            Thread.Sleep(2000);
+
+            // Check the last raw updated with new Data
+
+            IWebElement lastRecord = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]")); 
+
+            if (lastRecord.Text == "Zoom2021")
+            {
+                Console.WriteLine("Record updated Successfully");
+            }
+            else
+            {
+                Console.WriteLine(" Updated Unsuccessfully");
+            }
+
+            //-------------------Delete Data------------
+
+            // Delete the Record
+
+            //gotolastPageButton.Click();
+
+            if(lastRecord.Text == "Zoom2021")
+            {
+                IWebElement deleteButton = driver.FindElement(By.XPath(" //*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+                deleteButton.Click();
+                Thread.Sleep(2000);
+
+                //Confirm deletion
+
+                driver.SwitchTo().Alert().Accept();
+                Console.WriteLine("Sucessfully deleted data");
+            }
+            else
+            {
+                Console.WriteLine("Data Couldn't find to delete");
+            }   
+
 
         }
 
     }
 }
+

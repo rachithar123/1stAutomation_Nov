@@ -11,4 +11,10 @@
     <PackageReference Include="Selenium.WebDriver" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HomePage\" />
+    <Folder Include="LoginPage\" />
+    <Folder Include="TMPage\" />
+  </ItemGroup>
+
 </Project>
