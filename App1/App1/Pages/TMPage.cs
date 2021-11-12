@@ -1,57 +1,17 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using System;
-using System.IO;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace App1
+namespace App1.Pages
 {
-    class Program
+    class TMPage
     {
-        //private static object driver;
-
-        static void Main(string[] args)
+        public void CreateTM(IWebDriver driver)
         {
-
-            // open chrome browser
-            IWebDriver driver = new ChromeDriver();
-
-            driver.Manage().Window.Maximize();
-
-            // launch turnup portal
-            driver.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
-            Thread.Sleep(2000);
-            // identify username textbox and enter valid username
-            IWebElement usernameTextbox = driver.FindElement(By.Id("UserName"));
-            usernameTextbox.SendKeys("hari");
-
-            // identify password textbox and enter valid password
-            IWebElement passwordTextbox = driver.FindElement(By.Id("Password"));
-            passwordTextbox.SendKeys("123123");
-
-            // identify login button and click
-            IWebElement loginButton = driver.FindElement(By.XPath("//*[@id='loginForm']/form/div[3]/input[1]"));
-            loginButton.Click();
-
-            // check if user has logged in successfully
-            IWebElement helloHari = driver.FindElement(By.XPath("//*[@id='logoutForm']/ul/li/a"));
-            if (helloHari.Text == "Hello hari!")
-            {
-                Console.WriteLine(" successfully loggin, test passed.");
-            }
-            else
-            {
-                Console.WriteLine("Login failed, test failed.");
-            }
-            //click Administration tab
-            IWebElement administrator = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/a"));
-            administrator.Click();
-
-            // select Time & Material  from dropdown
-            IWebElement tmOption = driver.FindElement(By.XPath("/html/body/div[3]/div/div/ul/li[5]/ul/li[3]/a"));
-            tmOption.Click();
-
             // click on Create new button
             IWebElement createNewButton = driver.FindElement(By.XPath("//*[@id='container']/p/a"));
             createNewButton.Click();
@@ -87,7 +47,7 @@ namespace App1
 
             //check the time record is present in the table as expected
             IWebElement actualcode = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]"));
-            
+
             if (actualcode.Text == "ZTime2021")
             {
                 Console.WriteLine("Time recored has been created successfully");
@@ -97,17 +57,21 @@ namespace App1
                 Console.WriteLine("Testfailed");
             }
 
-            //--------------------Edit Data----------------------------
 
+        }
+        public void EditTM(IWebDriver driver)
+        {
             // check last page 
 
+            IWebElement gotolastPageButton = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[4]/a[4]/span"));
             gotolastPageButton.Click();
+            Thread.Sleep(2000);
 
             //Edit the Record
 
             IWebElement editButton = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
             editButton.Click();
-            
+
             //Thread.Sleep(2000);
 
             // Edit the Text box
@@ -129,7 +93,7 @@ namespace App1
 
             // Check the last raw updated with new Data
 
-            IWebElement lastRecord = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]")); 
+            IWebElement lastRecord = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]"));
 
             if (lastRecord.Text == "Zoom2021")
             {
@@ -140,13 +104,15 @@ namespace App1
                 Console.WriteLine(" Updated Unsuccessfully");
             }
 
-            //-------------------Delete Data------------
+        }
+        public void DeleteTM(IWebDriver driver)
+        {
+            IWebElement lastPageButton = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[4]/a[4]/span"));
+            lastPageButton.Click();
+            Thread.Sleep(2000);
 
-            // Delete the Record
-
-            //gotolastPageButton.Click();
-
-            if(lastRecord.Text == "Zoom2021")
+            IWebElement lastRecord = driver.FindElement(By.XPath("//*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[1]"));
+            if (lastRecord.Text == "Zoom2021")
             {
                 IWebElement deleteButton = driver.FindElement(By.XPath(" //*[@id='tmsGrid']/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
                 deleteButton.Click();
@@ -160,11 +126,9 @@ namespace App1
             else
             {
                 Console.WriteLine("Data Couldn't find to delete");
-            }   
+            }
 
 
         }
-
     }
 }
-
